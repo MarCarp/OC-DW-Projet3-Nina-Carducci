@@ -1,5 +1,4 @@
-(function($) {
-  $.fn.mauGallery = function(options) {
+$.fn.mauGallery = function(options) {
     var options = $.extend($.fn.mauGallery.defaults, options);
     var tagsCollection = [];
     return this.each(function() {
@@ -40,6 +39,7 @@
       $(this).fadeIn(500);
     });
   };
+  
   $.fn.mauGallery.defaults = {
     columns: 3,
     lightBox: true,
@@ -48,6 +48,7 @@
     tagsPosition: "bottom",
     navigation: true
   };
+
   $.fn.mauGallery.listeners = function(options) {
     $(".gallery-item").on("click", function() {
       if (options.lightBox && $(this).prop("tagName") === "IMG") {
@@ -65,7 +66,9 @@
       $.fn.mauGallery.methods.nextImage(options.lightboxId)
     );
   };
+  
   $.fn.mauGallery.methods = {
+
     createRowWrapper(element) {
       if (
         !element
@@ -260,4 +263,3 @@
       });
     }
   };
-})(jQuery);
