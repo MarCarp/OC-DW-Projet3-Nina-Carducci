@@ -12,12 +12,14 @@ $.fn.mauGallery = function(options) {
       }
       $.fn.mauGallery.listeners(options);
 
+      /* APPLIED ON EACH IMAGE OF THE GALLERY */
       $(this)
         .children(".gallery-item")
         .each(function(index) {
           $.fn.mauGallery.methods.responsiveImageItem($(this));
           $.fn.mauGallery.methods.moveItemInRowWrapper($(this));
           $.fn.mauGallery.methods.wrapItemInColumn($(this), options.columns);
+          /*COLLECT THE TAGS NAME BY THE GALLERY ELEMENTS
           var theTag = $(this).data("gallery-tag");
           if (
             options.showTags &&
@@ -25,16 +27,17 @@ $.fn.mauGallery = function(options) {
             tagsCollection.indexOf(theTag) === -1
           ) {
             tagsCollection.push(theTag);
-          }
+          }*/
         });
 
+        /*MAKE CLICKABLE TAGS FROM THE GALLERY-TAG ATTRIBUTE
       if (options.showTags) {
         $.fn.mauGallery.methods.showItemTags(
           $(this),
           options.tagsPosition,
           tagsCollection
         );
-      }
+      }*/
 
       $(this).fadeIn(500);
     });
@@ -58,10 +61,10 @@ $.fn.mauGallery = function(options) {
       }
     });
 
-    $(".gallery").on("click", ".nav-link", $.fn.mauGallery.methods.filterByTag);
     $(".gallery").on("click", ".mg-prev", () =>
       $.fn.mauGallery.methods.prevImage(options.lightboxId)
     );
+
     $(".gallery").on("click", ".mg-next", () =>
       $.fn.mauGallery.methods.nextImage(options.lightboxId)
     );
@@ -221,6 +224,7 @@ $.fn.mauGallery = function(options) {
                 </div>
             </div>`);
     },
+    /* MAKE CLICKABLE TAGs FROM DATA ATTRIBUTE
     showItemTags(gallery, position, tags) {
       var tagItems =
         '<li class="nav-item"><span class="nav-link active active-tag"  data-images-toggle="all">Tous</span></li>';
@@ -261,5 +265,61 @@ $.fn.mauGallery = function(options) {
             .show(300);
         }
       });
-    }
+    }*/
   };
+/* RECODE */
+/* RECODE */
+/* RECODE */
+const mainGallery = document.querySelector('.gallery');
+
+function filterBtn(toggle, wording, active=false) {
+    const filterBtn = document.createElement('LI');
+    filterBtn.classList.add('nav-item');
+    filterBtn.innerHTML = `<li class="nav-item"><span class="nav-link ${ active ? 'active':'' }"  data-images-toggle="${ toggle }">${ wording }</span></li>`;
+    filterBtn.addEventListener('click', (e)=>{
+        if(!e.target.classList.contains('active')) {
+            const activeLinks = mainGallery.querySelectorAll('.nav-link.active');
+            for(const activeLink of activeLinks) {
+                activeLink.classList.remove('active');
+            }
+            e.target.classList.add('active');
+            if( e.target.dataset.imagesToggle === 'all') {
+                const hiddenFigures = mainGallery.querySelectorAll('.gallery-item-container.hidden');
+                for(const  hiddenFigure of hiddenFigures) {
+                    hiddenFigure.classList.remove('hidden');
+                }
+            } else {
+                const galleryElements = mainGallery.querySelectorAll('.gallery-item');
+                for(const galleryEl of galleryElements) {
+                    if(galleryEl.dataset.galleryTag === e.target.dataset.imagesToggle) {
+                        galleryEl.parentNode.classList.remove('hidden');
+                    } else {
+                        galleryEl.parentNode.classList.add('hidden');
+                    }
+                }
+            }
+        }
+    });
+    return filterBtn;
+}
+
+function filterConstructor(tagList) {
+    const galleryNav = document.createElement('UL');
+    galleryNav.classList.add('tags-bar', 'nav', 'nav-pills');
+    galleryNav.append(filterBtn('all', 'Tous', true))
+    for(tagEl of tagList) {
+        galleryNav.append(filterBtn(tagEl,tagEl));
+    }
+    mainGallery.prepend(galleryNav);
+}
+/* PASSING THROUG ALL IMAGES */
+const galleryItems = document.querySelectorAll('.gallery-item');
+const niouTagsCollection = [];
+for (const galleryItem of galleryItems) {
+    const tagItem = galleryItem.dataset.galleryTag;
+    if(niouTagsCollection.indexOf(tagItem) === -1) {
+        niouTagsCollection.push(tagItem);
+    }
+    /*galleryItem.addEventListener('click', openItem);*/
+}
+filterConstructor(niouTagsCollection);

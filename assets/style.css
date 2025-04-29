@@ -6,6 +6,17 @@ body {
 	font-family: 'Inter';
 	font-style: normal;
 }
+/* RESET */
+img, svg {
+	vertical-align: middle;
+}
+
+/* Carroussel Custom */
+.carousel-item img {
+	display: block;
+	width: 100%;
+}
+
 #header {
 	background-color: white;
 	position: sticky;
@@ -93,12 +104,33 @@ body {
 #gallery {
 	/*	min-height: 100vh; */
 }
+/* CUSTOM GALLERY */
+.gallery-items {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 10px;
+}
+.gallery-item-container {
+	position: relative;
+}
+.gallery-item-container.hidden {
+	display: none;
+}
+.gallery-item-container::after {
+	content: "";
+	padding-bottom: 100%;
+	display: block;
+}
+/* CUSTOM GALLERY - END */
 .title{
 	text-align: center;
 	padding-block: 2em;
 }
 .gallery .nav {
 	justify-content: center;
+}
+.gallery .nav-link {
+	cursor: pointer;
 }
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
 	color: #fff;
